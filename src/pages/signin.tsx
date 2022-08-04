@@ -1,4 +1,4 @@
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { BuiltInProviderType } from 'next-auth/providers';
 import {
   ClientSafeProvider,
@@ -8,12 +8,14 @@ import {
   signIn,
 } from 'next-auth/react';
 
-export default function SignInPage(props: {
-  providers: Record<
-    LiteralUnion<BuiltInProviderType, string>,
-    ClientSafeProvider
-  > | null;
-}) {
+export default function SignInPage(
+  // props: {
+  //   providers: Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null
+  // }
+
+  // everything is typed as any despite inferring
+  props: InferGetServerSidePropsType<typeof getServerSideProps>
+) {
   if (!props.providers) return <div>No auth providers found</div>;
 
   return (
@@ -41,6 +43,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         destination: '/',
         permanent: false,
       },
+      props: {},
     };
   }
 
