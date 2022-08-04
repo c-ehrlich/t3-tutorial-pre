@@ -97,17 +97,13 @@ Features to show
 GitHub-Twitter
 - [x] Auth
 - [x] Custom Auth Page
-- Landing page - public timeline
-- Create models
-  - User
-    - Next-Auth stuff 
-    - Following
-    - IsPrivate
-    - LikedPosts
-  - Post
-    - Text
-    - CreatedAt
-    - UpdatedAt
+- [x] Post schema
+- [x] Create a post
+- [ ] get all posts - timeline on homepage
+- [ ] get all posts, this time with pagination (maybe do this later?)
+  - [*] https://trpc.io/docs/useInfiniteQuery
+- get AutoAnimate in there somehow
+  - use this? https://gist.github.com/hwkr/3fdea5d7f609b98c162e5325637cf3cb
 - Dashboard
   - Not logged in: posts by public accounts, and a login button
   - Logged in: all posts
