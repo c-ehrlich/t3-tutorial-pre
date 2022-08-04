@@ -94,8 +94,9 @@ Features to show
 - CSS modules - use them in one place
 
 GitHub-Twitter
+- [x] Auth
+- [ ] Custom Auth Page
 - Landing page - public timeline
-- Login with GitHub (custom page)
 - Create models
   - User
     - Next-Auth stuff 
