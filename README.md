@@ -68,18 +68,20 @@ Features to show
   - components
   - senior folder structure
 - tRPC
+  - Routing
+  - Queries & Mutations
   - Protected routes
   - inferQueryOutput
 - Next-Auth
-  - GitHub Provider
-  - Login
-  - 
+  - Discord Provider
+  - Add another provider
+  - Login, logout
+  - Custom login page
 - Prisma
-  - C
-  - R
-  - U
-  - D
-  - PrismaClient - create fake data
+  - Making models
+  - Using Postgres
+  - CRUD
+  - Prisma Studio
   - Aggregate
 - React Query
   - Query
@@ -91,11 +93,10 @@ Features to show
   - inferring a type from it
 - Tailwind
   - not much
-- CSS modules - use them in one place
 
 GitHub-Twitter
 - [x] Auth
-- [ ] Custom Auth Page
+- [x] Custom Auth Page
 - Landing page - public timeline
 - Create models
   - User
