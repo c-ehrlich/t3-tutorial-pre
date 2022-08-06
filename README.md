@@ -107,6 +107,11 @@ GitHub-Twitter
 - [x] get all posts, this time with pagination (maybe do this later?)
   - [*] https://alpha.trpc.io/docs/useInfiniteQuery (www instead of alpha on final?)
 - [x] bugfix: make post update the data again
+- [ ] user profile
+  - [x] with temp posts
+  - [x] with create post box if we're on our own profile
+  - [ ] load in real posts later as infinite query and invalidate the right thing on new post
+  - [ ] proper error on nonexistent user
 - Dashboard
   - Not logged in: posts by public accounts, and a login button
   - Logged in: all posts

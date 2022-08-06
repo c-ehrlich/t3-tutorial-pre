@@ -1,6 +1,8 @@
+import { useSession } from 'next-auth/react';
 import Image from 'next/future/image';
 import { inferQueryOutput } from '../../../utils/trpc';
 import defaultAvatar from '../post/default-avatar.jpeg';
+import CreatePost from './CreatePost';
 import PostList from './PostList';
 
 type UserProfileProps = {
@@ -8,11 +10,12 @@ type UserProfileProps = {
 };
 
 function UserProfile(props: UserProfileProps) {
+  const { data: session } = useSession();
   // get posts
 
   return (
     <div className='flex flex-col'>
-      <div className='flex'>
+      <div className='flex gap-2'>
         <Image
           className='rounded'
           src={props.user.image || defaultAvatar}
@@ -25,6 +28,10 @@ function UserProfile(props: UserProfileProps) {
           <div>Joined on {props.user.createdAt.toLocaleDateString()}</div>
         </div>
       </div>
+
+      {session?.user?.id && props.user.id === session?.user?.id && (
+        <CreatePost />
+      )}
 
       {/* posts, use props.user.posts until we have the current value */}
 
