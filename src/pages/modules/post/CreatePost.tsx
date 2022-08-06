@@ -3,7 +3,13 @@ import { trpc } from '../../../utils/trpc';
 
 function CreatePost() {
   const [text, setText] = useState('');
-  const createPostMutation = trpc.proxy.post.create.useMutation();
+  const queryClient = trpc.useContext();
+
+  const createPostMutation = trpc.proxy.post.create.useMutation({
+    onSettled: () => {
+      queryClient.invalidateQueries('post.getAll');
+    },
+  });
 
   function handleCreatePost() {
     createPostMutation.mutate({ text });

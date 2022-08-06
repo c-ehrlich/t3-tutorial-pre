@@ -100,6 +100,9 @@ GitHub-Twitter
 - [x] Post schema
 - [x] Create a post
 - [x] get all posts - timeline on homepage
+- [x] invalidate posts onComplete
+  - [*] afterwards show in video that its stil slow on 3g
+- [ ] actual optimistic update
 - [ ] get all posts, this time with pagination (maybe do this later?)
   - [*] https://trpc.io/docs/useInfiniteQuery
 - get AutoAnimate in there somehow
