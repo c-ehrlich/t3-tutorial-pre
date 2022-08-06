@@ -99,7 +99,7 @@ GitHub-Twitter
 - [x] Custom Auth Page
 - [x] Post schema
 - [x] Create a post
-- [ ] get all posts - timeline on homepage
+- [x] get all posts - timeline on homepage
 - [ ] get all posts, this time with pagination (maybe do this later?)
   - [*] https://trpc.io/docs/useInfiniteQuery
 - get AutoAnimate in there somehow

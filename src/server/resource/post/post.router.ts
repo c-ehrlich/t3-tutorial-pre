@@ -17,11 +17,22 @@ export const postRouter = t.router({
         throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
       }
 
-      return {
-        post,
-      };
+      return { post };
     }),
-  getAll: t.procedure.query(({ ctx }) => {
-    return ctx.prisma.post.findMany();
+  getAll: t.procedure.query(async ({ ctx }) => {
+    const posts = await ctx.prisma.post.findMany({
+      include: {
+        author: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    if (!posts) {
+      throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
+    }
+
+    return { posts };
   }),
 });
