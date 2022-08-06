@@ -2,7 +2,11 @@ import Image from 'next/future/image';
 import { inferQueryOutput } from '../../../utils/trpc';
 import defaultAvatar from './default-avatar.jpeg';
 
-function PostList(props: inferQueryOutput<'post.getAll'>) {
+type PostListProps = {
+  posts: inferQueryOutput<'post.getAll'>;
+};
+
+function PostList(props: PostListProps) {
   return (
     <div className='flex flex-col items-center gap-2 w-screen p-2'>
       {props.posts.map((post) => (

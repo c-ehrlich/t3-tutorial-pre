@@ -17,12 +17,17 @@ export const postRouter = t.router({
         throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
       }
 
-      return { post };
+      return post;
     }),
   getAll: t.procedure.query(async ({ ctx }) => {
     const posts = await ctx.prisma.post.findMany({
       include: {
-        author: true,
+        author: {
+          select: {
+            name: true,
+            image: true,
+          },
+        },
       },
       orderBy: {
         createdAt: 'desc',
@@ -33,6 +38,6 @@ export const postRouter = t.router({
       throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
     }
 
-    return { posts };
+    return posts;
   }),
 });
