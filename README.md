@@ -62,35 +62,35 @@
 
 Features to show
 - Next.js
-  - _app.tsx
-  - _document.tsx
-  - pages
-  - components
+  - [x] _app.tsx
+  - [x] pages
+  - [x] components
   - senior folder structure
 - tRPC
-  - Routing
-  - Queries & Mutations
-  - Protected routes
-  - inferQueryOutput
+  - [x] Routing
+  - [x] Queries & Mutations
+  - [ ] Protected routes
+  - [x] inferQueryOutput
 - Next-Auth
-  - Discord Provider
+  - [x] Discord Provider
   - Add another provider
-  - Login, logout
-  - Custom login page
+  - [x] Login, logout
+  - [x] Custom login page
 - Prisma
-  - Making models
-  - Using Postgres
+  - [x] Making models
+  - [x] Using Postgres
   - CRUD
   - Prisma Studio
   - Aggregate
 - React Query
-  - Query
-  - Mutation
-  - Optimistic Updates
-  - A query that doesn't fire automatically (load some info about user or something - maybe type in a user name and get info? post text partial match search?)
+  - [x] Query
+  - [x] Mutation
+  - [x] Optimistic Updates
+  - [x] Infinite Query
+  - [ ] A query that doesn't fire automatically
 - Zod
-  - creating a schema
-  - inferring a type from it
+  - [x] creating a schema
+  - [ ] inferring a type from it (hard to find a use for this in t3)
 - Tailwind
   - not much
 
@@ -104,10 +104,9 @@ GitHub-Twitter
   - [*] afterwards show in video that its stil slow on 3g
 - [x] actual optimistic update
 - [x] textbox styling
-- [ ] get all posts, this time with pagination (maybe do this later?)
-  - [*] https://trpc.io/docs/useInfiniteQuery
-- get AutoAnimate in there somehow
-  - use this? https://gist.github.com/hwkr/3fdea5d7f609b98c162e5325637cf3cb
+- [x] get all posts, this time with pagination (maybe do this later?)
+  - [*] https://alpha.trpc.io/docs/useInfiniteQuery (www instead of alpha on final?)
+- [ ] bugfix: make post update the data again
 - Dashboard
   - Not logged in: posts by public accounts, and a login button
   - Logged in: all posts
