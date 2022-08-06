@@ -1,9 +1,7 @@
 import type { NextPage } from 'next';
 import { useSession } from 'next-auth/react';
 import Head from 'next/head';
-import { trpc } from '../utils/trpc';
 import CreatePost from './modules/post/CreatePost';
-import PostList from './modules/post/PostList';
 import PublicTimeline from './modules/post/PublicTimeline';
 
 const Home: NextPage = () => {

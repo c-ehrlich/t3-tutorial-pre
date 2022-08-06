@@ -9,22 +9,38 @@ function CreatePost() {
 
   const createPostMutation = trpc.proxy.post.create.useMutation({
     onMutate: (post) => {
-      const currentPosts = queryClient.getQueryData(['post.getAll']);
+      if (session?.user) {
+        const date = new Date();
 
-      if (currentPosts && session?.user) {
         const newPost = {
-          createdAt: new Date(),
-          id: 'temp',
-          text: post.text,
-          updatedAt: new Date(),
+          id: JSON.stringify(date),
           userId: session.user.id,
+          text: post.text,
+          createdAt: date,
+          updatedAt: date,
           author: {
             name: session.user.name || 'unknown username',
             image: session.user.image || '',
           },
         };
-        const updatedPosts = [newPost, ...currentPosts];
-        queryClient.setQueryData(['post.getAll'], updatedPosts);
+
+        queryClient.setInfiniteQueryData(
+          ['post.getPaginated', { limit: 2 }],
+          (data) => {
+            if (!data) {
+              return {
+                pages: [],
+                pageParams: [],
+              };
+            }
+
+            if (data.pages[0]) {
+              data.pages[0].items.unshift(newPost);
+            }
+
+            return data;
+          }
+        );
       }
     },
     onError: (e) => {

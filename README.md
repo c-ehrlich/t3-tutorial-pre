@@ -106,7 +106,7 @@ GitHub-Twitter
 - [x] textbox styling
 - [x] get all posts, this time with pagination (maybe do this later?)
   - [*] https://alpha.trpc.io/docs/useInfiniteQuery (www instead of alpha on final?)
-- [ ] bugfix: make post update the data again
+- [x] bugfix: make post update the data again
 - Dashboard
   - Not logged in: posts by public accounts, and a login button
   - Logged in: all posts

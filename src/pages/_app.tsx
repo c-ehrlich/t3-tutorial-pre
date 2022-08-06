@@ -5,6 +5,7 @@ import type { AppType } from 'next/dist/shared/lib/utils';
 import { trpc } from '../utils/trpc';
 import Header from './modules/header/Header';
 import { useRouter } from 'next/router';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   const router = useRouter();
@@ -13,6 +14,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
 
   return (
     <SessionProvider session={pageProps.session}>
+      <ReactQueryDevtools />
       {!fullScreen && <Header />}
       <Component {...pageProps} />
     </SessionProvider>
