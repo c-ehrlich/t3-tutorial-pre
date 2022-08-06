@@ -15,7 +15,7 @@ export const postRouter = t.router({
       });
 
       if (!post) {
-        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
+        throw new TRPCError({ code: 'NOT_FOUND' });
       }
 
       return post;
@@ -76,7 +76,7 @@ export const postRouter = t.router({
     });
 
     if (!posts) {
-      throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
+      throw new TRPCError({ code: 'NOT_FOUND' });
     }
 
     return posts;

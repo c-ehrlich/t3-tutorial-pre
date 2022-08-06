@@ -1,4 +1,5 @@
 import Image from 'next/future/image';
+import Link from 'next/link';
 import { inferQueryOutput } from '../../../utils/trpc';
 import defaultAvatar from './default-avatar.jpeg';
 
@@ -23,8 +24,12 @@ function PostList(props: PostListProps) {
           />
           <div className='flex flex-col gap-2'>
             <div>
-              <strong>{post.author.name}</strong> -{' '}
-              {post.createdAt.toLocaleString()}
+              <strong className='hover:underline'>
+                <Link href={`/user/${post.userId}`}>
+                  <a>{post.author.name}</a>
+                </Link>
+              </strong>{' '}
+              - {post.createdAt.toLocaleString()}
             </div>
             <p>{post.text}</p>
           </div>
