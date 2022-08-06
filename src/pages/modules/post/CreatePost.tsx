@@ -42,19 +42,22 @@ function CreatePost() {
   }
 
   return (
-    <div className='bg-green-100 p-2 flex gap-2'>
-      <input
-        className='border border-black p-2'
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-      ></input>
-      <button
-        className='border border-black p-2 bg-white'
-        disabled={text.length < 1}
-        onClick={handleCreatePost}
-      >
-        Post
-      </button>
+    <div className='flex bg-green-100 p-2 justify-center'>
+      <div className='flex gap-2 w-[600px]'>
+        <textarea
+          placeholder={`What's up?`}
+          className='flex-1 border border-black p-2'
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+        ></textarea>
+        <button
+          className='border border-black p-2 bg-white'
+          disabled={text.length < 1}
+          onClick={handleCreatePost}
+        >
+          Post
+        </button>
+      </div>
     </div>
   );
 }

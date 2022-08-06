@@ -103,6 +103,7 @@ GitHub-Twitter
 - [x] invalidate posts onComplete
   - [*] afterwards show in video that its stil slow on 3g
 - [x] actual optimistic update
+- [x] textbox styling
 - [ ] get all posts, this time with pagination (maybe do this later?)
   - [*] https://trpc.io/docs/useInfiniteQuery
 - get AutoAnimate in there somehow
