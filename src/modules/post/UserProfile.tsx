@@ -1,5 +1,6 @@
 import { useSession } from 'next-auth/react';
 import Image from 'next/future/image';
+import { json } from 'stream/consumers';
 import { trpc } from '../../utils/trpc';
 import defaultAvatar from '../post/default-avatar.jpeg';
 import CreatePost from './CreatePost';
@@ -11,6 +12,7 @@ type UserProfileProps = {
 
 function UserProfile(props: UserProfileProps) {
   const { data: session } = useSession();
+  const queryClient = trpc.useContext();
 
   const {
     data: user,
@@ -30,6 +32,39 @@ function UserProfile(props: UserProfileProps) {
       },
     }
   );
+
+  console.log(user?.followers[0]);
+
+  const isFollowing =
+    session?.user && user?.followers[0]?.followerId === session.user.id;
+  console.log(isFollowing);
+
+  const followMutation = trpc.proxy.user.follow.useMutation({
+    onMutate: () => {
+      const user = queryClient.getQueryData([
+        'user.findOne',
+        { id: props.userId },
+      ]);
+
+      if (user) {
+        user._count.followers += 1;
+        user.followers[0] = { followerId: session?.user?.id ?? '' };
+
+        queryClient.setQueryData(['user.findOne', { id: props.userId }], user);
+      }
+    },
+    onError: (err) => console.error(err),
+    onSettled: () => {
+      queryClient.invalidateQueries(['user.findOne', { id: props.userId }]);
+    },
+  });
+
+  function handleFollow() {
+    followMutation.mutate({ id: props.userId });
+  }
+
+  // TODO - implement unfollow useMutation
+  function handleUnfollow() {}
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -62,6 +97,16 @@ function UserProfile(props: UserProfileProps) {
           <div>Following: {user._count.following}</div>
           <div>Posts: {user._count.posts}</div>
         </div>
+        {session?.user && (
+          <button
+            className='border border-black px-2 py-2 hover:bg-slate-200'
+            onClick={
+              isFollowing ? () => handleUnfollow() : () => handleFollow()
+            }
+          >
+            {isFollowing ? 'Unfollow' : 'Follow'}
+          </button>
+        )}
       </div>
 
       {session?.user?.id && user.id === session?.user?.id && <CreatePost />}

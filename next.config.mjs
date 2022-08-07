@@ -17,7 +17,7 @@ export default defineNextConfig({
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ['cdn.discordapp.com'],
+    domains: ['cdn.discordapp.com', 'avatars.githubusercontent.com'],
   },
   experimental: {
     images: {

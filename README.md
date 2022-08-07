@@ -119,7 +119,8 @@ GitHub-Twitter
   - [x] with optimistic update
 - [x] make infinite query limit global
 - [x] count of followers, following, posts on profile - use prisma count
-- [ ] you can follow and unfollow other users
+- [x] you can follow other users, including optimistic updates
+- [ ] you can unfollow other users, including optimistic updates
 - [ ] view timeline of only posts by people you're following
 - [ ] can like and unlike posts (not own)
 - User
