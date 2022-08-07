@@ -13,10 +13,6 @@ export const userRouter = t.router({
         image: true,
         createdAt: true,
         id: true,
-        // TODO use this for initial state, then use a query to stay up to date?
-        posts: {
-          take: 10,
-        },
       },
     });
 

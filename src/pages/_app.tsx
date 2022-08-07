@@ -3,7 +3,7 @@ import '../styles/globals.css';
 import { SessionProvider } from 'next-auth/react';
 import type { AppType } from 'next/dist/shared/lib/utils';
 import { trpc } from '../utils/trpc';
-import Header from './modules/header/Header';
+import Header from '../modules/header/Header';
 import { useRouter } from 'next/router';
 import { ReactQueryDevtools } from 'react-query/devtools';
 

@@ -26,12 +26,17 @@ export const postRouter = t.router({
       z.object({
         limit: z.number().min(1).nullish(),
         cursor: z.string().nullish(),
+        userId: z.string().cuid().optional(),
       })
     )
     .query(async ({ ctx, input }) => {
       const limit = input.limit ?? 20;
       const { cursor } = input;
       const items = await ctx.prisma.post.findMany({
+        where: {
+          // if userId is provided, only return posts from that user
+          ...(input.userId && { userId: input.userId }),
+        },
         // get an extra item at the end which we'll use as next cursor
         take: limit + 1,
         include: {

@@ -1,6 +1,6 @@
 import Image from 'next/future/image';
 import Link from 'next/link';
-import { inferQueryOutput } from '../../../utils/trpc';
+import { inferQueryOutput } from '../../utils/trpc';
 import defaultAvatar from './default-avatar.jpeg';
 
 type PostListProps = {

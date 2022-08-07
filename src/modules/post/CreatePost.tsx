@@ -1,6 +1,6 @@
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
-import { trpc } from '../../../utils/trpc';
+import { trpc } from '../../utils/trpc';
 
 function CreatePost() {
   const [text, setText] = useState('');
@@ -25,7 +25,7 @@ function CreatePost() {
         };
 
         queryClient.setInfiniteQueryData(
-          ['post.getPaginated', { limit: 2 }],
+          ['post.getPaginated', { limit: 2, userId: session.user.id }],
           (data) => {
             if (!data) {
               return {
@@ -48,7 +48,7 @@ function CreatePost() {
     },
     // fires both onError and onSuccess
     onSettled: () => {
-      queryClient.invalidateQueries('post.getAll');
+      queryClient.invalidateQueries(['post.getPaginated']);
     },
   });
 

@@ -1,8 +1,8 @@
 import type { NextPage } from 'next';
 import { useSession } from 'next-auth/react';
 import Head from 'next/head';
-import CreatePost from './modules/post/CreatePost';
-import PublicTimeline from './modules/post/PublicTimeline';
+import CreatePost from '../modules/post/CreatePost';
+import GetPosts from '../modules/post/GetPosts';
 
 const Home: NextPage = () => {
   const session = useSession();
@@ -26,7 +26,7 @@ function LoggedInIndex() {
   return (
     <>
       <CreatePost />
-      <PublicTimeline />
+      <GetPosts />
     </>
   );
 }

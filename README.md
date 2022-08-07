@@ -110,8 +110,9 @@ GitHub-Twitter
 - [ ] user profile
   - [x] with temp posts
   - [x] with create post box if we're on our own profile
-  - [ ] load in real posts later as infinite query and invalidate the right thing on new post
+  - [x] load in real posts later as infinite query and invalidate the right thing on new post
   - [ ] proper error on nonexistent user
+- [x] fix console error (breaking hooks rules?)
 - Dashboard
   - Not logged in: posts by public accounts, and a login button
   - Logged in: all posts
@@ -125,3 +126,5 @@ GitHub-Twitter
   - Edited if it has been edited
   - Button to edit it if the user owns the post
     - also protect the backend route
+- Vanilla Client https://trpc.io/docs/vanilla
+  - use this in a gSSP and fill cache with result?

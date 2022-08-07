@@ -1,7 +1,11 @@
-import { trpc } from '../../../utils/trpc';
+import { trpc } from '../../utils/trpc';
 import PostList from './PostList';
 
-function PublicTimeline() {
+interface GetPostsProps {
+  userId?: string;
+}
+
+function GetPosts(props: GetPostsProps) {
   const {
     data: posts,
     isLoading,
@@ -11,7 +15,7 @@ function PublicTimeline() {
     isFetchingNextPage,
     fetchNextPage,
   } = trpc.proxy.post.getPaginated.useInfiniteQuery(
-    { limit: 2 },
+    { limit: 2, ...(props.userId && { userId: props.userId }) },
     { getNextPageParam: (lastPage) => lastPage.nextCursor }
   );
 
@@ -47,4 +51,4 @@ function PublicTimeline() {
   return <div>Unexpected outcome in PublicTimeline</div>;
 }
 
-export default PublicTimeline;
+export default GetPosts;
