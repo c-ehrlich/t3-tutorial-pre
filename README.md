@@ -121,7 +121,7 @@ GitHub-Twitter
 - [x] count of followers, following, posts on profile - use prisma count
 - [x] you can follow other users, including optimistic updates
 - [x] you can unfollow other users, including optimistic updates
-- [ ] FIX: follow button not visible on own profile
+- [x] FIX: follow button visible on own profile
 - [ ] view timeline of only posts by people you're following
 - [ ] can like and unlike posts (not own)
 - User

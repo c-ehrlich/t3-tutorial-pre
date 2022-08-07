@@ -35,6 +35,7 @@ function UserProfile(props: UserProfileProps) {
 
   const isFollowing =
     session?.user && user?.followers[0]?.followerId === session.user.id;
+  const isOwnProfile = session?.user?.id === props.userId;
 
   const followMutation = trpc.proxy.user.follow.useMutation({
     onMutate: () => {
@@ -109,7 +110,7 @@ function UserProfile(props: UserProfileProps) {
           <div>Following: {user._count.following}</div>
           <div>Posts: {user._count.posts}</div>
         </div>
-        {session?.user && (
+        {session?.user && !isOwnProfile && (
           <button
             className='border border-black px-2 py-2 hover:bg-slate-200'
             onClick={
