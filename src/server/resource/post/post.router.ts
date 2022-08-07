@@ -59,13 +59,30 @@ export const postRouter = t.router({
         limit: z.number().min(1).nullish(),
         cursor: z.string().nullish(),
         userId: z.string().cuid().optional(),
+        isFollowing: z.boolean().optional(),
       })
     )
     .query(async ({ ctx, input }) => {
       const limit = input.limit ?? 20;
       const { cursor } = input;
+
+      const followRelations = await ctx.prisma.user
+        .findUniqueOrThrow({
+          where: { id: ctx?.session?.user?.id },
+        })
+        .following();
+      const usersFollowed = followRelations.map(
+        (relation) => relation.followingId
+      );
+
       const items = await ctx.prisma.post.findMany({
         where: {
+          // posts from users we're following
+          ...(input.isFollowing && {
+            userId: {
+              in: usersFollowed,
+            },
+          }),
           // if userId is provided, only return posts from that user
           ...(input.userId && { userId: input.userId }),
         },

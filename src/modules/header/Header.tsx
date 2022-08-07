@@ -5,10 +5,13 @@ function Header() {
   const session = useSession();
 
   return (
-    <div className='w-full flex justify-between bg-slate-800 text-white p-2'>
+    <div className='w-full flex items-center justify-between bg-slate-800 text-white p-2'>
       <Link href='/'>
         <h1 className='text-2xl cursor-pointer'>Fake Twitter</h1>
       </Link>
+      {session.status === 'authenticated' && (
+        <Link href='/following'>following</Link>
+      )}
       {session.status === 'authenticated' ? (
         <button
           className='border border-white p-1 hover:bg-slate-700'

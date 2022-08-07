@@ -20,6 +20,7 @@ function GetPosts(props: GetPostsProps) {
     {
       limit: INFINITE_QUERY_LIMIT,
       ...(props.userId && { userId: props.userId }),
+      ...(props.isFollowing && { isFollowing: true }),
     },
     { getNextPageParam: (lastPage) => lastPage.nextCursor }
   );

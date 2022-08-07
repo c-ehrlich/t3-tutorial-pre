@@ -19,6 +19,7 @@
 - If you don't know React yet - Jack Herrington's series
 - If you don't know TypeScript yet - also Jack Herrington's series, or just follow along here anyway
 - If you don't know APIs yet - FreeCodeCamp, and TomDoesTech
+- If you don't know DBs yet - Also FreeCodeCamp? Or CS50x
 
 ## What will this cover?
 - Not just code-along, but also explaining concepts!
@@ -39,7 +40,7 @@
 - Advanced Next-Auth patterns
 - Websockets (due to Lambdas - use an external service!)
 - Other deployment options
-- Let me know if you are interested in a follow-up that covers 
+- Let me know if you are interested in a follow-up that covers any of these things
 
 ## What will we be doing?
 - Take a look at the finished app
@@ -49,7 +50,8 @@
 
 ## What do you need?
 - a package manager (we will use yarn classic, but you can also use npm or pnpm)
-- a postgres database for development (see TKTK link)
+- a postgres (or mysql but you have to change it in the schema) database for development (see TKTK link)
+- if you want to deploy it, a postgres (or other sql) database
 
 ## Links
 - Docs
@@ -124,8 +126,7 @@ GitHub-Twitter
 - [x] FIX: follow button visible on own profile
 - [ ] view timeline of only posts by people you're following
 - [ ] can like and unlike posts (not own)
-- User
-  - Their avatar, Name, how many followers
+- [ ] 
   - a list of their posts with how many likes they have and a button to like them
   - click button: a popup for how many users have liked their posts in aggregate (prisma aggregate + delayed query)
 - Post
@@ -140,3 +141,5 @@ GitHub-Twitter
 HOMEWORK:
 - [ ] add count of how many liked posts a user has, clicking this opens /user/[...id]/liked
 - [ ] a page /user/[...id]/liked that shows anyone's liked posts
+- [ ] pages or modals that shows who a user's followers are, or who a user is following
+- [ ] make the app look good
