@@ -17,13 +17,30 @@ function UserProfile(props: UserProfileProps) {
     isLoading,
     isError,
     error,
-  } = trpc.proxy.user.findOne.useQuery({ id: props.userId });
+    errorUpdateCount,
+  } = trpc.proxy.user.findOne.useQuery(
+    { id: props.userId },
+    {
+      retry: (_failureCount, error) => {
+        if (error.data.code === 'NOT_FOUND') {
+          return false;
+        }
+
+        return true;
+      },
+    }
+  );
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
+  if (error?.data.code === 'NOT_FOUND') {
+    return <div>This user doesnt exist</div>;
+  }
+
   if (isError || !user) {
+    console.log('errorUpdateCount: ' + errorUpdateCount);
     return <div>Error: {JSON.stringify(error)}</div>;
   }
 
