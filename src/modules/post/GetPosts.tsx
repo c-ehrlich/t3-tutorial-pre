@@ -1,3 +1,4 @@
+import { INFINITE_QUERY_LIMIT } from '../../constants';
 import { trpc } from '../../utils/trpc';
 import PostList from './PostList';
 
@@ -16,7 +17,10 @@ function GetPosts(props: GetPostsProps) {
     isFetchingNextPage,
     fetchNextPage,
   } = trpc.proxy.post.getPaginated.useInfiniteQuery(
-    { limit: 2, ...(props.userId && { userId: props.userId }) },
+    {
+      limit: INFINITE_QUERY_LIMIT,
+      ...(props.userId && { userId: props.userId }),
+    },
     { getNextPageParam: (lastPage) => lastPage.nextCursor }
   );
 

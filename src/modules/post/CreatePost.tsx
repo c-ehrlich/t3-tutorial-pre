@@ -1,5 +1,6 @@
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
+import { INFINITE_QUERY_LIMIT } from '../../constants';
 import { trpc } from '../../utils/trpc';
 
 function CreatePost() {
@@ -25,7 +26,10 @@ function CreatePost() {
         };
 
         queryClient.setInfiniteQueryData(
-          ['post.getPaginated', { limit: 2, userId: session.user.id }],
+          [
+            'post.getPaginated',
+            { limit: INFINITE_QUERY_LIMIT, userId: session.user.id },
+          ],
           (data) => {
             if (!data) {
               return {

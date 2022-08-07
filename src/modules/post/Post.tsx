@@ -2,6 +2,7 @@ import { useSession } from 'next-auth/react';
 import Image from 'next/future/image';
 import Link from 'next/link';
 import { useState } from 'react';
+import { INFINITE_QUERY_LIMIT } from '../../constants';
 import { inferQueryOutput, trpc } from '../../utils/trpc';
 import defaultAvatar from './default-avatar.jpeg';
 
@@ -27,7 +28,7 @@ function Post(props: PostProps) {
       const queryData = queryClient.getInfiniteQueryData([
         'post.getPaginated',
         {
-          limit: 2,
+          limit: INFINITE_QUERY_LIMIT,
           ...(queryKeyRemainder && queryKeyRemainder),
         },
       ]);
@@ -48,7 +49,7 @@ function Post(props: PostProps) {
           [
             'post.getPaginated',
             {
-              limit: 2,
+              limit: INFINITE_QUERY_LIMIT,
               ...(queryKeyRemainder && queryKeyRemainder),
             },
           ],
