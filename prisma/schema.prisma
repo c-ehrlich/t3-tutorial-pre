@@ -50,19 +50,28 @@ model VerificationToken {
 }
 
 model User {
-    id            String    @id @default(cuid())
+    id            String        @id @default(cuid())
     name          String?
-    email         String?   @unique
+    email         String?       @unique
     emailVerified DateTime?
     image         String?
     accounts      Account[]
     sessions      Session[]
-    // following     User[]    @relation("Following")
-    // followers     User[]    @relation("Following")
-    createdAt     DateTime  @default(now())
-    updatedAt     DateTime  @default(now()) @updatedAt
-    posts         Post[]    @relation("Posts")
-    likedPosts    Post[]    @relation("Likes")
+    createdAt     DateTime      @default(now())
+    updatedAt     DateTime      @default(now()) @updatedAt
+    posts         Post[]        @relation("Posts")
+    likedPosts    Post[]        @relation("Likes")
+    followers     UserFollows[] @relation("Following")
+    following     UserFollows[] @relation("Follower")
+}
+
+model UserFollows {
+    follower    User   @relation("Follower", fields: [followerId], references: [id])
+    followerId  String
+    following   User   @relation("Following", fields: [followingId], references: [id])
+    followingId String
+
+    @@id([followerId, followingId])
 }
 
 model Post {

@@ -13,6 +13,13 @@ export const userRouter = t.router({
         image: true,
         createdAt: true,
         id: true,
+        _count: {
+          select: {
+            followers: true,
+            following: true,
+            posts: true,
+          },
+        },
       },
     });
 

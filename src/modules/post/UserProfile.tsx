@@ -58,6 +58,9 @@ function UserProfile(props: UserProfileProps) {
         <div className='flex flex-col'>
           <div>{user.name}</div>
           <div>Joined on {user.createdAt.toLocaleDateString()}</div>
+          <div>Followers: {user._count.followers}</div>
+          <div>Following: {user._count.following}</div>
+          <div>Posts: {user._count.posts}</div>
         </div>
       </div>
 

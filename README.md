@@ -117,10 +117,11 @@ GitHub-Twitter
 - [x] edit post
   - [x] without optimistic update
   - [x] with optimistic update
-- [ ] can like and unlike posts (not own)
-- [ ] page that shows posts you've liked
-- [ ] a page /user/[...id]/liked that shows anyone's liked posts
+- [x] make infinite query limit global
+- [x] count of followers, following, posts on profile - use prisma count
 - [ ] you can follow and unfollow other users
+- [ ] view timeline of only posts by people you're following
+- [ ] can like and unlike posts (not own)
 - User
   - Their avatar, Name, how many followers
   - a list of their posts with how many likes they have and a button to like them
@@ -135,4 +136,5 @@ GitHub-Twitter
   - use this in a gSSP and fill cache with result?
 
 HOMEWORK:
-- [ ] build a page that works like timeline on actual twitter - shows posts by people you follow, and your own posts. should have all the same features (can edit own posts, with optimistic updates, etc). write as little new code as possible, i've set everything up until now so that you can reuse a lot of stuff.
+- [ ] add count of how many liked posts a user has, clicking this opens /user/[...id]/liked
+- [ ] a page /user/[...id]/liked that shows anyone's liked posts
