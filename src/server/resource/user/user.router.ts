@@ -79,5 +79,33 @@ export const userRouter = t.router({
       return true;
     }),
 
-  // TODO - implement unfollow
+  unfollow: authedProcedure
+    .input(followUserSchema)
+    .mutation(async ({ input, ctx }) => {
+      // check if trying to unfollow self
+      if (input.id === ctx.session.user.id) {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'Cannot follow yourself',
+        });
+      }
+
+      const unfollow = await ctx.prisma.userFollows.delete({
+        where: {
+          followerId_followingId: {
+            followerId: ctx.session.user.id,
+            followingId: input.id,
+          },
+        },
+      });
+
+      if (!unfollow) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to unfollow user',
+        });
+      }
+
+      return true;
+    }),
 });

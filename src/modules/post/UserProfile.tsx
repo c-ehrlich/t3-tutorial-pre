@@ -33,11 +33,8 @@ function UserProfile(props: UserProfileProps) {
     }
   );
 
-  console.log(user?.followers[0]);
-
   const isFollowing =
     session?.user && user?.followers[0]?.followerId === session.user.id;
-  console.log(isFollowing);
 
   const followMutation = trpc.proxy.user.follow.useMutation({
     onMutate: () => {
@@ -63,8 +60,24 @@ function UserProfile(props: UserProfileProps) {
     followMutation.mutate({ id: props.userId });
   }
 
-  // TODO - implement unfollow useMutation
-  function handleUnfollow() {}
+  const unfollowMutation = trpc.proxy.user.unfollow.useMutation({
+    onMutate: () => {
+      const user = queryClient.getQueryData([
+        'user.findOne',
+        { id: props.userId },
+      ]);
+
+      if (user) {
+        user._count.followers -= 1;
+        user.followers = [];
+
+        queryClient.setQueryData(['user.findOne', { id: props.userId }], user);
+      }
+    },
+  });
+  function handleUnfollow() {
+    unfollowMutation.mutate({ id: props.userId });
+  }
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -75,7 +88,6 @@ function UserProfile(props: UserProfileProps) {
   }
 
   if (isError || !user) {
-    console.log('errorUpdateCount: ' + errorUpdateCount);
     return <div>Error: {JSON.stringify(error)}</div>;
   }
 
