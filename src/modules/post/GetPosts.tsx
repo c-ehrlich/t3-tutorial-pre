@@ -3,6 +3,7 @@ import PostList from './PostList';
 
 interface GetPostsProps {
   userId?: string;
+  isFollowing?: boolean;
 }
 
 function GetPosts(props: GetPostsProps) {
@@ -23,13 +24,21 @@ function GetPosts(props: GetPostsProps) {
 
   if (isLoading) return <div>Loading Posts...</div>;
 
-  // TODO probably extract this to a component in the future
   if (posts) {
     const flattenedPosts = posts.pages.map((p) => p.items).flat();
 
     return (
       <>
-        <PostList posts={flattenedPosts} />
+        <PostList
+          posts={flattenedPosts}
+          context={
+            props.userId
+              ? 'USER_PROFILE'
+              : props.isFollowing
+              ? 'FOLLOWING'
+              : 'PUBLIC_TIMELINE'
+          }
+        />
 
         <button
           className={`border border-black p-2 bg-slate-200 ${

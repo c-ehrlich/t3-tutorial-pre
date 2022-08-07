@@ -10,7 +10,8 @@
 
 ## Who is this for?
 - New developers with a bit of self teaching Web Dev experience (freeCodeCamp etc)
-  - You should have beginner level understanding of both frontend and backend (for example you have made a React app and an Express API in the past)
+  - you've learned the basics but now it feels like there's a huge gap stopping you from making 'real' apps
+  - You should have basic understanding of both frontend, backend, and databases (for example you have made a React app, and an Express API that talks to a SQL or Mongo database in the past)
 - More experienced web developers who are new to the T3 stack (you might want to fast forward in a few places)
 - Experienced non-web Developers who want to learn a web stack that is modern but easy
 
@@ -69,7 +70,7 @@ Features to show
 - tRPC
   - [x] Routing
   - [x] Queries & Mutations
-  - [ ] Protected routes
+  - [x] Protected routes
   - [x] inferQueryOutput
 - Next-Auth
   - [x] Discord Provider
@@ -92,7 +93,7 @@ Features to show
   - [x] creating a schema
   - [ ] inferring a type from it (hard to find a use for this in t3)
 - Tailwind
-  - not much
+  - [x] use it everywhere
 
 GitHub-Twitter
 - [x] Auth
@@ -113,9 +114,13 @@ GitHub-Twitter
   - [x] load in real posts later as infinite query and invalidate the right thing on new post
   - [x] proper error on nonexistent user
 - [x] fix console error (breaking hooks rules?)
-- Dashboard
-  - Not logged in: posts by public accounts, and a login button
-  - Logged in: all posts
+- [x] edit post
+  - [x] without optimistic update
+  - [x] with optimistic update
+- [ ] can like and unlike posts (not own)
+- [ ] page that shows posts you've liked
+- [ ] a page /user/[...id]/liked that shows anyone's liked posts
+- [ ] you can follow and unfollow other users
 - User
   - Their avatar, Name, how many followers
   - a list of their posts with how many likes they have and a button to like them
@@ -128,3 +133,6 @@ GitHub-Twitter
     - also protect the backend route
 - Vanilla Client https://trpc.io/docs/vanilla
   - use this in a gSSP and fill cache with result?
+
+HOMEWORK:
+- [ ] build a page that works like timeline on actual twitter - shows posts by people you follow, and your own posts. should have all the same features (can edit own posts, with optimistic updates, etc). write as little new code as possible, i've set everything up until now so that you can reuse a lot of stuff.

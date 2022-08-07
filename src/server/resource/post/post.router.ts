@@ -1,5 +1,5 @@
 import { authedProcedure, t } from '../../trpc/utils';
-import { createPostSchema } from './post.schema';
+import { createPostSchema, editPostSchema } from './post.schema';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
@@ -19,6 +19,38 @@ export const postRouter = t.router({
       }
 
       return post;
+    }),
+
+  edit: authedProcedure
+    .input(editPostSchema)
+    .mutation(async ({ ctx, input }) => {
+      // check that the user is allowed to edit the post
+      const post = await ctx.prisma.post.findUnique({
+        where: {
+          id: input.id,
+        },
+        select: {
+          userId: true,
+        },
+      });
+      if (post?.userId !== ctx.session.user.id) {
+        throw new TRPCError({ code: 'FORBIDDEN' });
+      }
+
+      const updatedPost = await ctx.prisma.post.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          text: input.text,
+        },
+      });
+
+      if (!updatedPost) {
+        throw new TRPCError({ code: 'NOT_FOUND' });
+      }
+
+      return true;
     }),
 
   getPaginated: t.procedure
