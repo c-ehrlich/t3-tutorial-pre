@@ -170,4 +170,49 @@ export const postRouter = t.router({
 
     return posts;
   }),
+
+  paginatedSearch: t.procedure
+    .input(
+      z.object({
+        limit: z.number().min(1).nullish(),
+        cursor: z.string().nullish(),
+        text: z.string().min(1),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const limit = input.limit ?? 20;
+      const { cursor } = input;
+
+      const items = await ctx.prisma.post.findMany({
+        where: {
+          text: {
+            contains: input.text,
+          },
+        },
+        take: limit + 1,
+        include: {
+          author: {
+            select: {
+              name: true,
+              image: true,
+            },
+          },
+        },
+        cursor: cursor ? { id: cursor } : undefined,
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
+
+      let nextCursor: typeof cursor | null = null;
+      if (items.length > limit) {
+        const nextItem = items.pop();
+        nextCursor = nextItem!.id;
+      }
+
+      return {
+        items,
+        nextCursor,
+      };
+    }),
 });

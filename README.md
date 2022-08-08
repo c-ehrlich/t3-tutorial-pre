@@ -127,7 +127,7 @@ GitHub-Twitter
 - [x] view timeline of only posts by people you're following
 - [ ] Search
   - [x] Basic
-  - [ ] Infinite Query  
+  - [x] Infinite Query  
   - [ ] Without button, on every input
   - [ ] Debounce
 - [ ] FIGURE OUT SOME REASON TO SHOW OFF VANILLA CLIENT

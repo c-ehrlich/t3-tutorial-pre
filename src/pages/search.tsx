@@ -1,15 +1,19 @@
 import { DefaultErrorShape } from '@trpc/server';
 import { useState } from 'react';
-import { UseQueryResult } from 'react-query';
+import { UseInfiniteQueryResult } from 'react-query';
+import { INFINITE_QUERY_LIMIT } from '../constants';
+import GetMorePostsButton from '../modules/post/GetMorePostsButton';
 import PostList from '../modules/post/PostList';
 import { inferQueryOutput, trpc } from '../utils/trpc';
 
 function Search() {
   const [searchString, setSearchString] = useState('');
 
-  const searchQuery = trpc.proxy.post.search.useQuery(
-    { text: searchString },
+  // we could just add another constraint to GetPosts but lets do this instead...
+  const searchQuery = trpc.proxy.post.paginatedSearch.useInfiniteQuery(
+    { text: searchString, limit: INFINITE_QUERY_LIMIT },
     {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
       enabled: false,
       keepPreviousData: true,
       onError: (err) => {
@@ -24,6 +28,8 @@ function Search() {
       },
     }
   );
+
+  searchQuery.error?.data.code;
 
   function handleSearch() {
     searchQuery.refetch();
@@ -55,7 +61,10 @@ function Search() {
 export default Search;
 
 function SearchResult(props: {
-  query: UseQueryResult<inferQueryOutput<'post.search'>, DefaultErrorShape>;
+  query: UseInfiniteQueryResult<
+    inferQueryOutput<'post.paginatedSearch'>,
+    DefaultErrorShape
+  >;
 }) {
   if (props.query.isError && props.query.error.data.code === 'NOT_FOUND') {
     return <div>Nothing found...</div>;
@@ -73,11 +82,22 @@ function SearchResult(props: {
     return <div>Havent searched yet...</div>;
   }
 
+  function nextPage() {
+    props.query.fetchNextPage();
+  }
+
   if (props.query.data) {
+    const flattenedPosts = props.query.data.pages.map((p) => p.items).flat();
+
     return (
       <>
         <h2>Search results</h2>
-        <PostList posts={props.query.data} context='SEARCH' />
+        <PostList posts={flattenedPosts} context='SEARCH' />
+        <GetMorePostsButton
+          hasNextPage={props.query.hasNextPage}
+          isFetchingNextPage={props.query.isFetchingNextPage}
+          fetchNextPage={nextPage}
+        />
       </>
     );
   }
