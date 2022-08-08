@@ -6,9 +6,15 @@ import { INFINITE_QUERY_LIMIT } from '../../constants';
 import { inferQueryOutput, trpc } from '../../utils/trpc';
 import defaultAvatar from './default-avatar.jpeg';
 
+export type PostContext =
+  | 'PUBLIC_TIMELINE'
+  | 'USER_PROFILE'
+  | 'FOLLOWING'
+  | 'SEARCH';
+
 interface PostProps {
   post: inferQueryOutput<'post.getAll'>[number];
-  context: 'PUBLIC_TIMELINE' | 'USER_PROFILE' | 'FOLLOWING';
+  context: PostContext;
 }
 
 function Post(props: PostProps) {

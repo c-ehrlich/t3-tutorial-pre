@@ -93,7 +93,7 @@ Features to show
   - [ ] A query that doesn't fire automatically
 - Zod
   - [x] creating a schema
-  - [ ] inferring a type from it (hard to find a use for this in t3)
+  - [ ] inferring a type from it
 - Tailwind
   - [x] use it everywhere
 
@@ -124,21 +124,20 @@ GitHub-Twitter
 - [x] you can follow other users, including optimistic updates
 - [x] you can unfollow other users, including optimistic updates
 - [x] FIX: follow button visible on own profile
-- [ ] view timeline of only posts by people you're following
-- [ ] can like and unlike posts (not own)
-- [ ] 
-  - a list of their posts with how many likes they have and a button to like them
-  - click button: a popup for how many users have liked their posts in aggregate (prisma aggregate + delayed query)
-- Post
-  - Post
-  - Created at
-  - Edited if it has been edited
-  - Button to edit it if the user owns the post
-    - also protect the backend route
-- Vanilla Client https://trpc.io/docs/vanilla
+- [x] view timeline of only posts by people you're following
+- [ ] Search
+  - [x] Basic
+  - [ ] Infinite Query  
+  - [ ] Without button, on every input
+  - [ ] Debounce
+- [ ] FIGURE OUT SOME REASON TO SHOW OFF VANILLA CLIENT
+  - https://trpc.io/docs/vanilla
   - use this in a gSSP and fill cache with result?
 
-HOMEWORK:
+HOMEWORK after watching the video (build this but don't include in video - maybe a different branch?)
+- [ ] can like/unlike posts (for example like button could be on other users posts where the edit button is on own posts)
+- [ ] can reply to posts, add a single post view page that shows replies
+- [ ] post can show how many replies it has and what it is a reply to
 - [ ] add count of how many liked posts a user has, clicking this opens /user/[...id]/liked
 - [ ] a page /user/[...id]/liked that shows anyone's liked posts
 - [ ] pages or modals that shows who a user's followers are, or who a user is following

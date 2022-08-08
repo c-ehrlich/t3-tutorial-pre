@@ -1,5 +1,9 @@
 import { authedProcedure, t } from '../../trpc/utils';
-import { createPostSchema, editPostSchema } from './post.schema';
+import {
+  createPostSchema,
+  editPostSchema,
+  searchPostSchema,
+} from './post.schema';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
@@ -130,6 +134,37 @@ export const postRouter = t.router({
     });
 
     if (!posts) {
+      throw new TRPCError({ code: 'NOT_FOUND' });
+    }
+
+    return posts;
+  }),
+
+  search: t.procedure.input(searchPostSchema).query(async ({ ctx, input }) => {
+    const posts = await ctx.prisma.post.findMany({
+      where: {
+        text: {
+          contains: input.text,
+        },
+      },
+      include: {
+        author: {
+          select: {
+            name: true,
+            image: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    if (!Array.isArray(posts)) {
+      throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
+    }
+
+    if (posts.length === 0) {
       throw new TRPCError({ code: 'NOT_FOUND' });
     }
 

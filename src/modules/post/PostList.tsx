@@ -1,9 +1,9 @@
 import { inferQueryOutput } from '../../utils/trpc';
-import Post from './Post';
+import Post, { PostContext } from './Post';
 
 type PostListProps = {
   posts: inferQueryOutput<'post.getAll'>;
-  context: 'PUBLIC_TIMELINE' | 'USER_PROFILE' | 'FOLLOWING';
+  context: PostContext;
 };
 
 function PostList(props: PostListProps) {

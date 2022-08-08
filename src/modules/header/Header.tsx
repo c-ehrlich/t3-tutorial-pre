@@ -12,6 +12,7 @@ function Header() {
       {session.status === 'authenticated' && (
         <Link href='/following'>following</Link>
       )}
+      <Link href='/search'>search</Link>
       {session.status === 'authenticated' ? (
         <button
           className='border border-white p-1 hover:bg-slate-700'
