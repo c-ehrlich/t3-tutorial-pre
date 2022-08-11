@@ -1,10 +1,8 @@
-import { DefaultErrorShape } from '@trpc/server';
 import { useState } from 'react';
-import { UseInfiniteQueryResult } from 'react-query';
 import { INFINITE_QUERY_LIMIT } from '../constants';
 import GetMorePostsButton from '../modules/post/GetMorePostsButton';
 import PostList from '../modules/post/PostList';
-import { inferQueryOutput, trpc } from '../utils/trpc';
+import { ShortUseInfiniteQueryResult, trpc } from '../utils/trpc';
 
 function Search() {
   const [searchString, setSearchString] = useState('');
@@ -61,10 +59,8 @@ function Search() {
 export default Search;
 
 function SearchResult(props: {
-  query: UseInfiniteQueryResult<
-    inferQueryOutput<'post.paginatedSearch'>,
-    DefaultErrorShape
-  >;
+  // shout outs to cloudfox
+  query: ShortUseInfiniteQueryResult<'post.paginatedSearch'>;
 }) {
   if (props.query.isError && props.query.error.data.code === 'NOT_FOUND') {
     return <div>Nothing found...</div>;
