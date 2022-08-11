@@ -140,3 +140,8 @@ HOMEWORK after watching the video (build this but don't include in video - maybe
 - [ ] a page /user/[...id]/liked that shows anyone's liked posts
 - [ ] pages or modals that shows who a user's followers are, or who a user is following
 - [ ] make the app look good
+
+- [ ] Extract out some hooks
+
+HOMEWORK NOTES
+- [x] Likes: Having to modify 4 different database operations shows that there's probably a better way to generalize this

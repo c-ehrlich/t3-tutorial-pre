@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { INFINITE_QUERY_LIMIT } from '../../constants';
 import { inferQueryOutput, trpc } from '../../utils/trpc';
 import defaultAvatar from './default-avatar.jpeg';
+import { Heart } from 'tabler-icons-react';
 
 export type PostContext =
   | 'PUBLIC_TIMELINE'
@@ -23,6 +24,9 @@ function Post(props: PostProps) {
   const [text, setText] = useState(props.post.text);
 
   const [isEditing, setIsEditing] = useState(false);
+
+  const haveLiked =
+    session?.user?.id && session.user.id === props.post.likedBy[0]?.id;
 
   const editPostMutation = trpc.proxy.post.edit.useMutation({
     onMutate: (editedPost) => {
@@ -85,7 +89,33 @@ function Post(props: PostProps) {
     }
   }
 
-  // edit post mutation
+  const likePostMutation = trpc.proxy.post.likePost.useMutation({
+    onError: (err) => {
+      console.error(err);
+    },
+
+    onSettled: () => {
+      queryClient.invalidateQueries(['post.getPaginated']);
+    },
+  });
+
+  function handleLikePost() {
+    likePostMutation.mutate({ id: props.post.id });
+  }
+
+  const unlikePostMutation = trpc.proxy.post.unlikePost.useMutation({
+    onError: (err) => {
+      console.error(err);
+    },
+
+    onSettled: () => {
+      queryClient.invalidateQueries(['post.getPaginated']);
+    },
+  });
+
+  function handleUnlikePost() {
+    unlikePostMutation.mutate({ id: props.post.id });
+  }
 
   return (
     <div
@@ -109,9 +139,18 @@ function Post(props: PostProps) {
             </strong>{' '}
             - {props.post.createdAt.toLocaleString()}
           </div>
-          {session?.user?.id === props.post.userId && (
+          {session?.user?.id && session.user.id === props.post.userId && (
             <button onClick={handleEditButtonEvent}>
               {isEditing ? 'save' : 'edit'}
+            </button>
+          )}
+          {session?.user?.id && session.user.id !== props.post.userId && (
+            <button className='bg-none'>
+              {haveLiked ? (
+                <Heart color='red' fill='red' onClick={handleUnlikePost} />
+              ) : (
+                <Heart onClick={handleLikePost} />
+              )}
             </button>
           )}
         </div>

@@ -2,6 +2,7 @@ import { authedProcedure, t } from '../../trpc/utils';
 import {
   createPostSchema,
   editPostSchema,
+  likePostSchema,
   searchPostSchema,
 } from './post.schema';
 import { TRPCError } from '@trpc/server';
@@ -99,6 +100,14 @@ export const postRouter = t.router({
               image: true,
             },
           },
+          likedBy: {
+            where: {
+              id: ctx?.session?.user?.id ? ctx.session.user.id : '',
+            },
+            select: {
+              id: true,
+            },
+          },
         },
         cursor: cursor ? { id: cursor } : undefined,
         orderBy: {
@@ -127,6 +136,14 @@ export const postRouter = t.router({
             image: true,
           },
         },
+        likedBy: {
+          where: {
+            id: ctx?.session?.user?.id ? ctx.session.user.id : '',
+          },
+          select: {
+            id: true,
+          },
+        },
       },
       orderBy: {
         createdAt: 'desc',
@@ -152,6 +169,14 @@ export const postRouter = t.router({
           select: {
             name: true,
             image: true,
+          },
+        },
+        likedBy: {
+          where: {
+            id: ctx?.session?.user?.id ? ctx.session.user.id : '',
+          },
+          select: {
+            id: true,
           },
         },
       },
@@ -197,6 +222,14 @@ export const postRouter = t.router({
               image: true,
             },
           },
+          likedBy: {
+            where: {
+              id: ctx?.session?.user?.id ? ctx.session.user.id : '',
+            },
+            select: {
+              id: true,
+            },
+          },
         },
         cursor: cursor ? { id: cursor } : undefined,
         orderBy: {
@@ -214,5 +247,55 @@ export const postRouter = t.router({
         items,
         nextCursor,
       };
+    }),
+
+  likePost: authedProcedure
+    .input(likePostSchema)
+    .mutation(async ({ ctx, input }) => {
+      const likedPost = await ctx.prisma.post.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          likedBy: {
+            connect: {
+              id: ctx.session.user.id,
+            },
+          },
+        },
+      });
+
+      if (!likedPost) {
+        throw new TRPCError({ code: 'NOT_FOUND' });
+      }
+
+      console.log(likedPost);
+
+      return true;
+    }),
+
+  unlikePost: authedProcedure
+    .input(likePostSchema)
+    .mutation(async ({ ctx, input }) => {
+      const unlikedPost = await ctx.prisma.post.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          likedBy: {
+            disconnect: {
+              id: ctx.session.user.id,
+            },
+          },
+        },
+      });
+
+      if (!unlikedPost) {
+        throw new TRPCError({ code: 'NOT_FOUND' });
+      }
+
+      console.log(unlikedPost);
+
+      return true;
     }),
 });
