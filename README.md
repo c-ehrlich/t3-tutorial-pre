@@ -64,38 +64,40 @@
   - Zod
 
 Features to show
-- Next.js
+- Next.js / React
   - [x] _app.tsx
   - [x] pages
   - [x] components
-  - senior folder structure
+  - [x] custom hooks
 - tRPC
   - [x] Routing
   - [x] Queries & Mutations
   - [x] Protected routes
   - [x] inferQueryOutput
-- Next-Auth
-  - [x] Discord Provider
-  - Add another provider
-  - [x] Login, logout
-  - [x] Custom login page
-- Prisma
-  - [x] Making models
-  - [x] Using Postgres
-  - CRUD
-  - Prisma Studio
-  - Aggregate
+  - [x] custom inferred types w/ generics
 - React Query
   - [x] Query
   - [x] Mutation
   - [x] Optimistic Updates
   - [x] Infinite Query
-  - [ ] A query that doesn't fire automatically
+  - [x] A query that doesn't fire automatically
+- Next-Auth
+  - [x] Discord Provider
+  - [x] Login, logout
+  - [x] Custom login page
+- Prisma
+  - [x] Making models
+  - [x] Using Postgres
+  - [x] CRUD
+  - [x] Prisma Studio
+  - [x] Aggregate
+  - [x] Add/remove relations
 - Zod
-  - [x] creating a schema
-  - [ ] inferring a type from it
+  - [x] creating schema
+  - [x] inferring types from schema
+  - [x] using variables in schema
 - Tailwind
-  - [x] use it everywhere
+  - [x] Just basic stuff
 
 GitHub-Twitter
 - [x] Auth
@@ -128,20 +130,17 @@ GitHub-Twitter
 - [x] Search
   - [x] Basic
   - [x] Infinite Query  
-- [ ] FIGURE OUT SOME REASON TO SHOW OFF VANILLA CLIENT
-  - https://trpc.io/docs/vanilla
-  - use this in a gSSP and fill cache with result?
+- [x] Show some TS generic stuff to simplify trpc inferred types
+- [x] can like/unlike posts
+  - [x] with optimistic updates
+- [x] Extract some mutations into hooks (explain why you might want to do this)
 
-HOMEWORK after watching the video (build this but don't include in video - maybe a different branch?)
-- [ ] can like/unlike posts (for example like button could be on other users posts where the edit button is on own posts)
+HOMEWORK after watching the video
+
 - [ ] can reply to posts, add a single post view page that shows replies
 - [ ] post can show how many replies it has and what it is a reply to
 - [ ] add count of how many liked posts a user has, clicking this opens /user/[...id]/liked
 - [ ] a page /user/[...id]/liked that shows anyone's liked posts
 - [ ] pages or modals that shows who a user's followers are, or who a user is following
 - [ ] make the app look good
-
-- [ ] Extract out some hooks
-
-HOMEWORK NOTES
-- [x] Likes: Having to modify 4 different database operations shows that there's probably a better way to generalize this
+- [ ] Likes: Having to modify prisma calls in 4 different functions shows that there's probably a better way to generalize some of this stuff

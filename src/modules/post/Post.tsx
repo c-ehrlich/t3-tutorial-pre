@@ -6,6 +6,7 @@ import { INFINITE_QUERY_LIMIT } from '../../constants';
 import { inferQueryOutput, trpc } from '../../utils/trpc';
 import defaultAvatar from './default-avatar.jpeg';
 import { Heart } from 'tabler-icons-react';
+import { useEditPost, useLikePost, useUnlikePost } from './postHooks';
 
 export type PostContext =
   | 'PUBLIC_TIMELINE'
@@ -13,69 +14,29 @@ export type PostContext =
   | 'FOLLOWING'
   | 'SEARCH';
 
-interface PostProps {
+export interface PostProps {
   post: inferQueryOutput<'post.getAll'>[number];
   context: PostContext;
 }
 
 function Post(props: PostProps) {
   const { data: session } = useSession();
-  const queryClient = trpc.useContext();
   const [text, setText] = useState(props.post.text);
-
   const [isEditing, setIsEditing] = useState(false);
-
   const haveLiked =
     session?.user?.id && session.user.id === props.post.likedBy[0]?.id;
 
-  const editPostMutation = trpc.proxy.post.edit.useMutation({
-    onMutate: (editedPost) => {
-      const queryKeyRemainder = props.context === 'USER_PROFILE' &&
-        session?.user?.id === props.post.userId && {
-          userId: session.user.id,
-        };
+  const editPostMutation = useEditPost(props);
+  const likePostMutation = useLikePost(props);
+  const unlikePostMutation = useUnlikePost(props);
 
-      const queryData = queryClient.getInfiniteQueryData([
-        'post.getPaginated',
-        {
-          limit: INFINITE_QUERY_LIMIT,
-          ...(queryKeyRemainder && queryKeyRemainder),
-        },
-      ]);
+  function handleLikePost() {
+    likePostMutation.mutate({ id: props.post.id });
+  }
 
-      if (queryData) {
-        const optimisticUpdate: typeof queryData = {
-          ...queryData,
-          pages: queryData.pages.map((page) => ({
-            ...page,
-            items: page.items.map((item) => ({
-              ...item,
-              text: item.id === editedPost.id ? editedPost.text : item.text,
-            })),
-          })),
-        };
-
-        queryClient.setInfiniteQueryData(
-          [
-            'post.getPaginated',
-            {
-              limit: INFINITE_QUERY_LIMIT,
-              ...(queryKeyRemainder && queryKeyRemainder),
-            },
-          ],
-          optimisticUpdate
-        );
-      }
-    },
-
-    onError: (err) => {
-      console.error(err);
-    },
-
-    onSettled: () => {
-      queryClient.invalidateQueries(['post.getPaginated']);
-    },
-  });
+  function handleUnlikePost() {
+    unlikePostMutation.mutate({ id: props.post.id });
+  }
 
   function handleEditButtonEvent() {
     if (!isEditing) {
@@ -87,115 +48,6 @@ function Post(props: PostProps) {
       });
       setIsEditing(false);
     }
-  }
-
-  const likePostMutation = trpc.proxy.post.likePost.useMutation({
-    onMutate: (likedPost) => {
-      const queryKeyRemainder = props.context === 'USER_PROFILE' &&
-        session?.user?.id === props.post.userId && {
-          userId: session.user.id,
-        };
-
-      const queryData = queryClient.getInfiniteQueryData([
-        'post.getPaginated',
-        {
-          limit: INFINITE_QUERY_LIMIT,
-          ...(queryKeyRemainder && queryKeyRemainder),
-        },
-      ]);
-
-      if (queryData) {
-        const optimisticUpdate: typeof queryData = {
-          ...queryData,
-          pages: queryData.pages.map((page) => ({
-            ...page,
-            items: page.items.map((item) => ({
-              ...item,
-              likedBy:
-                item.id === likedPost.id
-                  ? [{ id: session?.user?.id ?? '' }]
-                  : item.likedBy,
-            })),
-          })),
-        };
-
-        queryClient.setInfiniteQueryData(
-          [
-            'post.getPaginated',
-            {
-              limit: INFINITE_QUERY_LIMIT,
-              ...(queryKeyRemainder && queryKeyRemainder),
-            },
-          ],
-          optimisticUpdate
-        );
-      }
-    },
-
-    onError: (err) => {
-      console.error(err);
-    },
-
-    onSettled: () => {
-      queryClient.invalidateQueries(['post.getPaginated']);
-    },
-  });
-
-  function handleLikePost() {
-    likePostMutation.mutate({ id: props.post.id });
-  }
-
-  const unlikePostMutation = trpc.proxy.post.unlikePost.useMutation({
-    onMutate: (unlikedPost) => {
-      const queryKeyRemainder = props.context === 'USER_PROFILE' &&
-        session?.user?.id === props.post.userId && {
-          userId: session.user.id,
-        };
-
-      const queryData = queryClient.getInfiniteQueryData([
-        'post.getPaginated',
-        {
-          limit: INFINITE_QUERY_LIMIT,
-          ...(queryKeyRemainder && queryKeyRemainder),
-        },
-      ]);
-
-      if (queryData) {
-        const optimisticUpdate: typeof queryData = {
-          ...queryData,
-          pages: queryData.pages.map((page) => ({
-            ...page,
-            items: page.items.map((item) => ({
-              ...item,
-              likedBy: item.id === unlikedPost.id ? [] : item.likedBy,
-            })),
-          })),
-        };
-
-        queryClient.setInfiniteQueryData(
-          [
-            'post.getPaginated',
-            {
-              limit: INFINITE_QUERY_LIMIT,
-              ...(queryKeyRemainder && queryKeyRemainder),
-            },
-          ],
-          optimisticUpdate
-        );
-      }
-    },
-
-    onError: (err) => {
-      console.error(err);
-    },
-
-    onSettled: () => {
-      queryClient.invalidateQueries(['post.getPaginated']);
-    },
-  });
-
-  function handleUnlikePost() {
-    unlikePostMutation.mutate({ id: props.post.id });
   }
 
   return (
