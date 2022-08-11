@@ -90,6 +90,48 @@ function Post(props: PostProps) {
   }
 
   const likePostMutation = trpc.proxy.post.likePost.useMutation({
+    onMutate: (likedPost) => {
+      const queryKeyRemainder = props.context === 'USER_PROFILE' &&
+        session?.user?.id === props.post.userId && {
+          userId: session.user.id,
+        };
+
+      const queryData = queryClient.getInfiniteQueryData([
+        'post.getPaginated',
+        {
+          limit: INFINITE_QUERY_LIMIT,
+          ...(queryKeyRemainder && queryKeyRemainder),
+        },
+      ]);
+
+      if (queryData) {
+        const optimisticUpdate: typeof queryData = {
+          ...queryData,
+          pages: queryData.pages.map((page) => ({
+            ...page,
+            items: page.items.map((item) => ({
+              ...item,
+              likedBy:
+                item.id === likedPost.id
+                  ? [{ id: session?.user?.id ?? '' }]
+                  : item.likedBy,
+            })),
+          })),
+        };
+
+        queryClient.setInfiniteQueryData(
+          [
+            'post.getPaginated',
+            {
+              limit: INFINITE_QUERY_LIMIT,
+              ...(queryKeyRemainder && queryKeyRemainder),
+            },
+          ],
+          optimisticUpdate
+        );
+      }
+    },
+
     onError: (err) => {
       console.error(err);
     },
@@ -104,6 +146,45 @@ function Post(props: PostProps) {
   }
 
   const unlikePostMutation = trpc.proxy.post.unlikePost.useMutation({
+    onMutate: (unlikedPost) => {
+      const queryKeyRemainder = props.context === 'USER_PROFILE' &&
+        session?.user?.id === props.post.userId && {
+          userId: session.user.id,
+        };
+
+      const queryData = queryClient.getInfiniteQueryData([
+        'post.getPaginated',
+        {
+          limit: INFINITE_QUERY_LIMIT,
+          ...(queryKeyRemainder && queryKeyRemainder),
+        },
+      ]);
+
+      if (queryData) {
+        const optimisticUpdate: typeof queryData = {
+          ...queryData,
+          pages: queryData.pages.map((page) => ({
+            ...page,
+            items: page.items.map((item) => ({
+              ...item,
+              likedBy: item.id === unlikedPost.id ? [] : item.likedBy,
+            })),
+          })),
+        };
+
+        queryClient.setInfiniteQueryData(
+          [
+            'post.getPaginated',
+            {
+              limit: INFINITE_QUERY_LIMIT,
+              ...(queryKeyRemainder && queryKeyRemainder),
+            },
+          ],
+          optimisticUpdate
+        );
+      }
+    },
+
     onError: (err) => {
       console.error(err);
     },
