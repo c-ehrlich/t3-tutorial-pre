@@ -125,11 +125,9 @@ GitHub-Twitter
 - [x] you can unfollow other users, including optimistic updates
 - [x] FIX: follow button visible on own profile
 - [x] view timeline of only posts by people you're following
-- [ ] Search
+- [x] Search
   - [x] Basic
   - [x] Infinite Query  
-  - [ ] Without button, on every input
-  - [ ] Debounce
 - [ ] FIGURE OUT SOME REASON TO SHOW OFF VANILLA CLIENT
   - https://trpc.io/docs/vanilla
   - use this in a gSSP and fill cache with result?
