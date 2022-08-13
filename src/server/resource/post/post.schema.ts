@@ -7,14 +7,8 @@ export const createPostSchema = z.object({
   text,
 });
 
-export type CreatePostInput = z.infer<typeof createPostSchema>;
-
 export const editPostSchema = z.object({
   id,
-  text,
-});
-
-export const searchPostSchema = z.object({
   text,
 });
 

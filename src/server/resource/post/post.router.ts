@@ -3,10 +3,11 @@ import {
   createPostSchema,
   editPostSchema,
   likePostSchema,
-  searchPostSchema,
 } from './post.schema';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
+import { getPostSearchOptions } from './post.service';
+import { getNextCursor } from '../../../utils/db.util';
 
 export const postRouter = t.router({
   create: authedProcedure
@@ -38,6 +39,7 @@ export const postRouter = t.router({
           userId: true,
         },
       });
+
       if (post?.userId !== ctx.session.user.id) {
         throw new TRPCError({ code: 'FORBIDDEN' });
       }
@@ -68,8 +70,7 @@ export const postRouter = t.router({
       })
     )
     .query(async ({ ctx, input }) => {
-      const limit = input.limit ?? 20;
-      const { cursor } = input;
+      const searchOptions = getPostSearchOptions(ctx, input);
 
       const followRelations = await ctx.prisma.user
         .findUniqueOrThrow({
@@ -91,110 +92,16 @@ export const postRouter = t.router({
           // if userId is provided, only return posts from that user
           ...(input.userId && { userId: input.userId }),
         },
-        // get an extra item at the end which we'll use as next cursor
-        take: limit + 1,
-        include: {
-          author: {
-            select: {
-              name: true,
-              image: true,
-            },
-          },
-          likedBy: {
-            where: {
-              id: ctx?.session?.user?.id ? ctx.session.user.id : '',
-            },
-            select: {
-              id: true,
-            },
-          },
-        },
-        cursor: cursor ? { id: cursor } : undefined,
-        orderBy: {
-          createdAt: 'desc',
-        },
+        ...searchOptions,
       });
 
-      let nextCursor: typeof cursor | null = null;
-      if (items.length > limit) {
-        const nextItem = items.pop();
-        nextCursor = nextItem!.id;
-      }
+      const nextCursor = getNextCursor({ items, input });
 
       return {
         items,
         nextCursor,
       };
     }),
-
-  getAll: t.procedure.query(async ({ ctx }) => {
-    const posts = await ctx.prisma.post.findMany({
-      include: {
-        author: {
-          select: {
-            name: true,
-            image: true,
-          },
-        },
-        likedBy: {
-          where: {
-            id: ctx?.session?.user?.id ? ctx.session.user.id : '',
-          },
-          select: {
-            id: true,
-          },
-        },
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-    });
-
-    if (!posts) {
-      throw new TRPCError({ code: 'NOT_FOUND' });
-    }
-
-    return posts;
-  }),
-
-  search: t.procedure.input(searchPostSchema).query(async ({ ctx, input }) => {
-    const posts = await ctx.prisma.post.findMany({
-      where: {
-        text: {
-          contains: input.text,
-        },
-      },
-      include: {
-        author: {
-          select: {
-            name: true,
-            image: true,
-          },
-        },
-        likedBy: {
-          where: {
-            id: ctx?.session?.user?.id ? ctx.session.user.id : '',
-          },
-          select: {
-            id: true,
-          },
-        },
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-    });
-
-    if (!Array.isArray(posts)) {
-      throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
-    }
-
-    if (posts.length === 0) {
-      throw new TRPCError({ code: 'NOT_FOUND' });
-    }
-
-    return posts;
-  }),
 
   paginatedSearch: t.procedure
     .input(
@@ -205,8 +112,7 @@ export const postRouter = t.router({
       })
     )
     .query(async ({ ctx, input }) => {
-      const limit = input.limit ?? 20;
-      const { cursor } = input;
+      const searchOptions = getPostSearchOptions(ctx, input);
 
       const items = await ctx.prisma.post.findMany({
         where: {
@@ -214,34 +120,10 @@ export const postRouter = t.router({
             contains: input.text,
           },
         },
-        take: limit + 1,
-        include: {
-          author: {
-            select: {
-              name: true,
-              image: true,
-            },
-          },
-          likedBy: {
-            where: {
-              id: ctx?.session?.user?.id ? ctx.session.user.id : '',
-            },
-            select: {
-              id: true,
-            },
-          },
-        },
-        cursor: cursor ? { id: cursor } : undefined,
-        orderBy: {
-          createdAt: 'desc',
-        },
+        ...searchOptions,
       });
 
-      let nextCursor: typeof cursor | null = null;
-      if (items.length > limit) {
-        const nextItem = items.pop();
-        nextCursor = nextItem!.id;
-      }
+      const nextCursor = getNextCursor({ items, input });
 
       return {
         items,
@@ -269,8 +151,6 @@ export const postRouter = t.router({
         throw new TRPCError({ code: 'NOT_FOUND' });
       }
 
-      console.log(likedPost);
-
       return true;
     }),
 
@@ -293,8 +173,6 @@ export const postRouter = t.router({
       if (!unlikedPost) {
         throw new TRPCError({ code: 'NOT_FOUND' });
       }
-
-      console.log(unlikedPost);
 
       return true;
     }),
