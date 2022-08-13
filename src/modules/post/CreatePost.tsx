@@ -19,6 +19,7 @@ function CreatePost() {
           text: post.text,
           createdAt: date,
           updatedAt: date,
+          likedBy: [],
           author: {
             name: session.user.name || 'unknown username',
             image: session.user.image || '',

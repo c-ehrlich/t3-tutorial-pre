@@ -2,7 +2,7 @@ import { inferQueryOutput } from '../../utils/trpc';
 import Post, { PostContext } from './Post';
 
 type PostListProps = {
-  posts: inferQueryOutput<'post.getAll'>;
+  posts: inferQueryOutput<'post.getPaginated'>['items'];
   context: PostContext;
 };
 

@@ -15,7 +15,7 @@ export type PostContext =
   | 'SEARCH';
 
 export interface PostProps {
-  post: inferQueryOutput<'post.getAll'>[number];
+  post: inferQueryOutput<'post.getPaginated'>['items'][number];
   context: PostContext;
 }
 
