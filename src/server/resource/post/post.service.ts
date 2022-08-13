@@ -1,4 +1,25 @@
+import { TRPCError } from '@trpc/server';
 import type { Context } from '../../../server/trpc/context';
+import { CreatePostInput } from './post.schema';
+
+export function createPost({
+  ctx,
+  input,
+}: {
+  ctx: Context;
+  input: CreatePostInput;
+}) {
+  if (!ctx.session || !ctx.session.user) {
+    throw new TRPCError({ code: 'UNAUTHORIZED' });
+  }
+
+  return ctx.prisma.post.create({
+    data: {
+      userId: ctx.session.user.id,
+      text: input.text,
+    },
+  });
+}
 
 type GetPaginatedPostsInput = {
   cursor?: string | null | undefined;

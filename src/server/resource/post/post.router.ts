@@ -6,19 +6,14 @@ import {
 } from './post.schema';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
-import { getPostSearchOptions } from './post.service';
+import { createPost, getPostSearchOptions } from './post.service';
 import { getNextCursor } from '../../../utils/db.util';
 
 export const postRouter = t.router({
   create: authedProcedure
     .input(createPostSchema)
     .mutation(async ({ ctx, input }) => {
-      const post = await ctx.prisma.post.create({
-        data: {
-          userId: ctx.session.user.id,
-          text: input.text,
-        },
-      });
+      const post = await createPost({ ctx, input });
 
       if (!post) {
         throw new TRPCError({ code: 'NOT_FOUND' });

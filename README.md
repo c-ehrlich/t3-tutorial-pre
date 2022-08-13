@@ -136,6 +136,7 @@ GitHub-Twitter
 - [x] Extract some mutations into hooks (explain why you might want to do this)
 - [] Refactor DB access code
   - [x] Paginated Searches
+  - [x] CreatePost
   - [ ] All Searches
 
 HOMEWORK after watching the video

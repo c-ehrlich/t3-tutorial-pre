@@ -6,6 +6,7 @@ const text = z.string().min(1);
 export const createPostSchema = z.object({
   text,
 });
+export type CreatePostInput = z.infer<typeof createPostSchema>;
 
 export const editPostSchema = z.object({
   id,
