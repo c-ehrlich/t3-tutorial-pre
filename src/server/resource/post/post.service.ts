@@ -95,6 +95,7 @@ type GetPaginatedPostsInput = {
   limit?: number | null | undefined;
   userId?: string | undefined;
   isFollowing?: boolean | undefined;
+  text?: string | undefined;
 };
 
 export async function getPaginatedPosts({
@@ -116,6 +117,12 @@ export async function getPaginatedPosts({
       }),
       // if userId is provided, only return posts from that user
       ...(input.userId && { userId: input.userId }),
+      // if we're searching, filter by search text
+      ...(input.text && {
+        text: {
+          contains: input.text,
+        },
+      }),
     },
     // get an extra item at the end which we'll use as next cursor
     ...getPostSearchOptions(ctx, input),

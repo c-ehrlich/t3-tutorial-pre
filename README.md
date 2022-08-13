@@ -138,7 +138,8 @@ GitHub-Twitter
   - [x] Paginated Searches
   - [x] CreatePost
   - [x] EditPost
-  - [ ] All Searches
+  - [x] Like/Unlike
+  - [x] All Searches
 
 HOMEWORK after watching the video
 
