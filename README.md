@@ -134,12 +134,13 @@ GitHub-Twitter
 - [x] can like/unlike posts
   - [x] with optimistic updates
 - [x] Extract some mutations into hooks (explain why you might want to do this)
-- [] Refactor DB access code
+- [x] Refactor DB access code
   - [x] Paginated Searches
   - [x] CreatePost
   - [x] EditPost
   - [x] Like/Unlike
   - [x] All Searches
+- [x] fix homepage auth bug
 
 HOMEWORK after watching the video
 

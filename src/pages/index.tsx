@@ -15,7 +15,13 @@ const Home: NextPage = () => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
-      <main>{session ? <LoggedInIndex /> : <div>logged out</div>}</main>
+      <main>
+        {session.status === 'authenticated' ? (
+          <LoggedInIndex />
+        ) : (
+          <div>logged out</div>
+        )}
+      </main>
     </>
   );
 };
