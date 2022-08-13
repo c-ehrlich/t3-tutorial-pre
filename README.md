@@ -137,6 +137,7 @@ GitHub-Twitter
 - [] Refactor DB access code
   - [x] Paginated Searches
   - [x] CreatePost
+  - [x] EditPost
   - [ ] All Searches
 
 HOMEWORK after watching the video

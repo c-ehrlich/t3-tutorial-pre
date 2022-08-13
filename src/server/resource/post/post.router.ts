@@ -6,7 +6,7 @@ import {
 } from './post.schema';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
-import { createPost, getPostSearchOptions } from './post.service';
+import { createPost, editPost, getPostSearchOptions } from './post.service';
 import { getNextCursor } from '../../../utils/db.util';
 
 export const postRouter = t.router({
@@ -25,28 +25,7 @@ export const postRouter = t.router({
   edit: authedProcedure
     .input(editPostSchema)
     .mutation(async ({ ctx, input }) => {
-      // check that the user is allowed to edit the post
-      const post = await ctx.prisma.post.findUnique({
-        where: {
-          id: input.id,
-        },
-        select: {
-          userId: true,
-        },
-      });
-
-      if (post?.userId !== ctx.session.user.id) {
-        throw new TRPCError({ code: 'FORBIDDEN' });
-      }
-
-      const updatedPost = await ctx.prisma.post.update({
-        where: {
-          id: input.id,
-        },
-        data: {
-          text: input.text,
-        },
-      });
+      const updatedPost = editPost({ ctx, input });
 
       if (!updatedPost) {
         throw new TRPCError({ code: 'NOT_FOUND' });

@@ -1,6 +1,6 @@
 import { TRPCError } from '@trpc/server';
 import type { Context } from '../../../server/trpc/context';
-import { CreatePostInput } from './post.schema';
+import { CreatePostInput, EditPostInput } from './post.schema';
 
 export function createPost({
   ctx,
@@ -16,6 +16,41 @@ export function createPost({
   return ctx.prisma.post.create({
     data: {
       userId: ctx.session.user.id,
+      text: input.text,
+    },
+  });
+}
+
+export async function editPost({
+  ctx,
+  input,
+}: {
+  ctx: Context;
+  input: EditPostInput;
+}) {
+  if (!ctx.session || !ctx.session.user) {
+    throw new TRPCError({ code: 'UNAUTHORIZED' });
+  }
+
+  // check that the user is allowed to edit the post
+  const post = await ctx.prisma.post.findUnique({
+    where: {
+      id: input.id,
+    },
+    select: {
+      userId: true,
+    },
+  });
+
+  if (post?.userId !== ctx.session.user.id) {
+    throw new TRPCError({ code: 'FORBIDDEN' });
+  }
+
+  return ctx.prisma.post.update({
+    where: {
+      id: input.id,
+    },
+    data: {
       text: input.text,
     },
   });
