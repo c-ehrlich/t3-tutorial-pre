@@ -17,3 +17,4 @@ export type EditPostInput = z.infer<typeof editPostSchema>;
 export const likePostSchema = z.object({
   id,
 });
+export type LikePostInput = z.infer<typeof likePostSchema>;

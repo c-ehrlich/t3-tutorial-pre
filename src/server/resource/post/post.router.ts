@@ -6,7 +6,12 @@ import {
 } from './post.schema';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
-import { createPost, editPost, getPostSearchOptions } from './post.service';
+import {
+  createPost,
+  editPost,
+  getPaginatedPosts,
+  likeOrUnlikePost,
+} from './post.service';
 import { getNextCursor } from '../../../utils/db.util';
 
 export const postRouter = t.router({
@@ -44,30 +49,7 @@ export const postRouter = t.router({
       })
     )
     .query(async ({ ctx, input }) => {
-      const searchOptions = getPostSearchOptions(ctx, input);
-
-      const followRelations = await ctx.prisma.user
-        .findUniqueOrThrow({
-          where: { id: ctx?.session?.user?.id },
-        })
-        .following();
-      const usersFollowed = followRelations.map(
-        (relation) => relation.followingId
-      );
-
-      const items = await ctx.prisma.post.findMany({
-        where: {
-          // posts from users we're following
-          ...(input.isFollowing && {
-            userId: {
-              in: usersFollowed,
-            },
-          }),
-          // if userId is provided, only return posts from that user
-          ...(input.userId && { userId: input.userId }),
-        },
-        ...searchOptions,
-      });
+      const items = await getPaginatedPosts({ ctx, input });
 
       const nextCursor = getNextCursor({ items, input });
 
@@ -86,16 +68,7 @@ export const postRouter = t.router({
       })
     )
     .query(async ({ ctx, input }) => {
-      const searchOptions = getPostSearchOptions(ctx, input);
-
-      const items = await ctx.prisma.post.findMany({
-        where: {
-          text: {
-            contains: input.text,
-          },
-        },
-        ...searchOptions,
-      });
+      const items = await getPaginatedPosts({ ctx, input });
 
       const nextCursor = getNextCursor({ items, input });
 
@@ -108,18 +81,7 @@ export const postRouter = t.router({
   likePost: authedProcedure
     .input(likePostSchema)
     .mutation(async ({ ctx, input }) => {
-      const likedPost = await ctx.prisma.post.update({
-        where: {
-          id: input.id,
-        },
-        data: {
-          likedBy: {
-            connect: {
-              id: ctx.session.user.id,
-            },
-          },
-        },
-      });
+      const likedPost = await likeOrUnlikePost({ ctx, input, intent: 'like' });
 
       if (!likedPost) {
         throw new TRPCError({ code: 'NOT_FOUND' });
@@ -131,17 +93,10 @@ export const postRouter = t.router({
   unlikePost: authedProcedure
     .input(likePostSchema)
     .mutation(async ({ ctx, input }) => {
-      const unlikedPost = await ctx.prisma.post.update({
-        where: {
-          id: input.id,
-        },
-        data: {
-          likedBy: {
-            disconnect: {
-              id: ctx.session.user.id,
-            },
-          },
-        },
+      const unlikedPost = await likeOrUnlikePost({
+        ctx,
+        input,
+        intent: 'unlike',
       });
 
       if (!unlikedPost) {
