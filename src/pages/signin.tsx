@@ -1,19 +1,8 @@
 import { GetServerSideProps } from 'next';
-import { BuiltInProviderType } from 'next-auth/providers';
-import {
-  ClientSafeProvider,
-  getProviders,
-  getSession,
-  LiteralUnion,
-  signIn,
-} from 'next-auth/react';
+import { getProviders, getSession, signIn } from 'next-auth/react';
 
 export default function SignInPage(props: {
-  // DURING VIDEO SHOW OFF INFERGETSERVERSIDEPROPSTYPE
-  providers: Record<
-    LiteralUnion<BuiltInProviderType, string>,
-    ClientSafeProvider
-  > | null;
+  providers: Awaited<ReturnType<typeof getProviders>>;
 }) {
   if (!props.providers) return <div>No auth providers found</div>;
 
